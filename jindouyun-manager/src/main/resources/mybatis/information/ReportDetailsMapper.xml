@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jindouyun.information.dao.ReportDetailsDao">
+
+	<select id="get" resultType="com.jindouyun.information.domain.ReportDetailsDO">
+		select `id`,`report_id`,`title`,`content`,sort from t_report_details where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.jindouyun.information.domain.ReportDetailsDO">
+		select `id`,`report_id`,`title`,`content`,sort from t_report_details
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="reportId != null and reportId != ''"> and report_id = #{reportId} </if>
+		  		  <if test="title != null and title != ''"> and title = #{title} </if>
+		  		  <if test="content != null and content != ''"> and content = #{content} </if>
+		  		  <if test="sort != null and sort != ''"> and content = #{sort} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by sort asc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from t_report_details
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="reportId != null and reportId != ''"> and report_id = #{reportId} </if>
+		  		  <if test="title != null and title != ''"> and title = #{title} </if>
+		  		  <if test="content != null and content != ''"> and content = #{content} </if>
+		  		  <if test="sort != null and sort != ''"> and content = #{sort} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.jindouyun.information.domain.ReportDetailsDO" useGeneratedKeys="true" keyProperty="id">
+		insert into t_report_details
+		(
+			`report_id`, 
+			`title`, 
+			`content`,
+			sort
+		)
+		values
+		(
+			#{reportId}, 
+			#{title}, 
+			#{content},
+			#{sort}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.jindouyun.information.domain.ReportDetailsDO">
+		update t_report_details 
+		<set>
+			<if test="reportId != null">`report_id` = #{reportId}, </if>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="content != null">`content` = #{content},</if>
+			<if test="sort != null">`sort` = #{sort}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from t_report_details where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from t_report_details where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

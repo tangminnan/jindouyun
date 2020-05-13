@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<input id="id" name="id" th:value="${reportList.id}"
+								type="hidden">
+						<div id="jian">
+							<!-- <div class="form-group">
+								<label class="col-sm-3 control-label">报告编号：</label>
+								<div class="col-sm-8">
+									<input id="reportNum" name="reportNum" class="form-control"
+										type="text" th:value="${reportList.reportNum}">
+								</div>
+							</div> -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">报告名称：</label>
+								<div class="col-sm-8">
+									<input id="reportName" name="reportName" class="form-control"
+										type="text" th:value="${reportList.reportName}">
+								</div>
+							</div>
+						</div>
+							<div id="biaotou">
+								<div class="form-group">
+									<label class="col-sm-2 control-label" style="width: 14%;">序号</label>
+									<label class="col-sm-3 control-label" style="width: 20%;">题目</label>
+									<label class="col-sm-3 control-label" style="width: 42%;">内容</label>
+								</div> 
+							</div>
+							<div id="neirong"></div>
+
+							<div id="other"></div>
+							
+							<div class="form-group" style="margin-left: 80%;">
+								<div class="col-sm-8 col-sm-offset-3">
+									<!-- <button type="button" class="btn btn-primary" id="shang" onclick="shangbtn();">上一步</button> -->
+									<button type="submit" class="btn btn-primary" id="wan">完成</button>
+									<!-- <button type="button" class="btn btn-primary" id="xia" onclick="xiabtn();">下一步</button> -->
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript"
+		src="/js/appjs/information/reportList/edit.js">
+		
+	</script>
+	
+	<script type="text/javascript">
+	
+/* 		var createDate = [];
+		laydate.render({
+			elem: '#createDate',
+			type: 'date',
+			btns: ['now', 'confirm'],
+		    done: function(value, date){
+		    	createDate = [];
+		    	createDate.push(value);
+		    	$('#createDate').siblings().val(createDate[0]);
+			  }
+		});
+		
+		*/
+		
+		$().ready(function(){
+			
+			var id = $("input[name='id']").val();
+			$.ajax({
+				cache:true,
+				type : "get",
+				url :"/information/reportList/getReportDetails/"+id,
+				async : false,
+				error : function(request) {
+					parent.layer.alert("Connection error");
+				},
+				success : function(data) {
+					//$("#neirong").empty();
+					if(data.length>0){
+						var html = '';
+						for(var i =0 ;i<data.length;i++){
+							html+='	<div class="form-group choosecontent">'
+							html+='		<label class="col-sm-1 control-label"></label>'
+							html+='			<input id="detailsid" name="detailsid" value="'+data[i].id+'" class="form-control" type="hidden">'
+							html+='		<div class="col-sm-1">'
+							html+='			<input id="sort" name="sort" value="'+data[i].sort+'" class="form-control" type="text" style="margin-top: 10px;">'
+							html+='		</div>'
+							html+='		<div class="col-sm-4">'
+							html+='			<input id="title" name="title" value="'+data[i].title+'" class="form-control" type="text" style="margin-top: 10px;">'
+							html+='		</div>'
+							html+='		<div class="col-sm-6">'
+							html+='			<textarea id="content" name="content" class="form-control" rows="2" cols="100">'+data[i].content+'</textarea>'
+							html+='		</div>'
+							html+='	</div>'
+						}
+						$("#neirong").append(html);
+					}else{
+						
+					}
+				}
+			})
+			
+			
+			
+			var alabel=document.getElementsByTagName('label');
+			var len= alabel.length;
+			var label=alabel[len-1];
+			var html = '<a class="btn btn-success btn-xs" onclick="add();" style="text-decoration: none; border-radius: 50%;margin-top: 9px;"><i class="fa fa-plus" aria-hidden="true"></i></a>  <a class="btn btn-warning btn-xs" onclick="remove();" style="text-decoration: none; border-radius: 50%;margin-top: 9px;"><i class="fa fa-minus" aria-hidden="true"></i></a>'
+			label.innerHTML=html;
+			
+			
+			/* $('#neirong').hide();
+			$('#other').hide();
+			$('#shang').hide();
+			$('#wan').hide();
+			$('#biaotou').hide(); */			
+		})
+		
+		
+		/* function xiabtn(){
+			var reportNum = $('input[name="reportNum"]').val();
+			if(reportNum.length<=0 || reportNum == null){
+				return alert("报告编号不能为空！！！");
+			}
+			var reportName = $('input[name="reportName"]').val();
+			if(reportName.length<=0 || reportName == null){
+				return alert("报告名称不能为空！！！");
+			}
+			var id = $("input[name='id']").val();
+			$.ajax({
+				cache:true,
+				type : "get",
+				url :"/information/reportList/getReportDetails/"+id,
+				async : false,
+				error : function(request) {
+					parent.layer.alert("Connection error");
+				},
+				success : function(data) {
+					$("#neirong").empty();
+					if(data.length>0){
+						var html = '';
+						for(var i =0 ;i<data.length;i++){
+							html+='	<div class="form-group choosecontent">'
+							html+='		<label class="col-sm-1 control-label"></label>'
+							html+='			<input id="detailsid" name="detailsid" value="'+data[i].id+'" class="form-control" type="hidden">'
+							html+='		<div class="col-sm-1">'
+							html+='			<input id="sort" name="sort" value="'+data[i].sort+'" class="form-control" type="text" style="margin-top: 10px;">'
+							html+='		</div>'
+							html+='		<div class="col-sm-4">'
+							html+='			<input id="title" name="title" value="'+data[i].title+'" class="form-control" type="text" style="margin-top: 10px;">'
+							html+='		</div>'
+							html+='		<div class="col-sm-6">'
+							html+='			<textarea id="content" name="content" class="form-control" rows="2" cols="100">'+data[i].content+'</textarea>'
+							html+='		</div>'
+							html+='	</div>'
+						}
+						$("#neirong").append(html);
+					}else{
+						
+					}
+				}
+			})
+			
+			$('#jian').hide();
+			$('#neirong').show();
+			$('#other').show();
+			$('#shang').show();
+			$('#xia').hide();
+			$('#wan').show();
+			$('#biaotou').show();	
+			$('#content:first').val(reportNum);
+			
+			var alabel=document.getElementsByTagName('label');
+			var len= alabel.length;
+			var label=alabel[len-1];
+			var html = '<a class="btn btn-success btn-xs" onclick="add();" style="text-decoration: none; border-radius: 50%;margin-top: 9px;"><i class="fa fa-plus" aria-hidden="true"></i></a>  <a class="btn btn-warning btn-xs" onclick="remove();" style="text-decoration: none; border-radius: 50%;margin-top: 9px;"><i class="fa fa-minus" aria-hidden="true"></i></a>'
+			label.innerHTML=html;
+		}
+		
+		function shangbtn(){
+			$('#jian').show();
+			$('#neirong').hide();
+			$('#other').hide();
+			$('#shang').hide();
+			$('#xia').show();
+			$('#wan').hide();
+			$('#biaotou').hide();	
+		} */
+		
+		
+		function add(){
+			
+			var alabel=document.getElementsByTagName('label');
+			var len= alabel.length;
+			var label=alabel[len-1];
+			var html = '';
+			label.innerHTML=html;	
+			
+			var html = '';
+				html+='	<div class="form-group choosecontent">'
+				html+='		<label class="col-sm-1 control-label">'
+				html+='			<a class="btn btn-success btn-xs" onclick="add();" style="text-decoration: none; border-radius: 50%;margin-top: 9px;"><i class="fa fa-plus" aria-hidden="true"></i></a>'
+				html+='			<a class="btn btn-warning btn-xs" onclick="remove();" style="text-decoration: none; border-radius: 50%;margin-top: 9px;"><i class="fa fa-minus" aria-hidden="true"></i></a>'
+				html+='		</label>'
+				html+='		<div class="col-sm-1">'
+				html+='			<input id="sort" name="sort" value="" class="form-control" type="text" style="margin-top: 10px;">'
+				html+='		</div>'
+				html+='		<div class="col-sm-4">'
+				html+='			<input id="title" name="title" value="" class="form-control" type="text" style="margin-top: 10px;">'
+				html+='		</div>'
+				html+='		<div class="col-sm-6">'
+				html+='			<textarea id="content" name="content" class="form-control" rows="2" cols="100"></textarea>'
+				html+='		</div>'
+				html+='	</div>'
+			$("#other").append(html);
+				
+		}
+		
+		function remove(){
+			var adiv=document.getElementsByClassName('choosecontent');
+			var len= adiv.length;
+			if(len < 2){
+				alert("至少存在一项！！！");
+			}else{
+				adiv[adiv.length-1].remove();
+				
+				var alabel=document.getElementsByTagName('label');
+				var len= alabel.length;
+				var label=alabel[len-1];
+				var html = '<a class="btn btn-success btn-xs" onclick="add();" style="text-decoration: none; border-radius: 50%;margin-top: 9px;"><i class="fa fa-plus" aria-hidden="true"></i></a>  <a class="btn btn-warning btn-xs" onclick="remove();" style="text-decoration: none; border-radius: 50%;margin-top: 9px;"><i class="fa fa-minus" aria-hidden="true"></i></a>'
+				label.innerHTML=html;
+			}
+			
+		}
+		
+	</script>
+</body>
+</html>
