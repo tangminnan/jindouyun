@@ -30,11 +30,19 @@ public class ReportListDO implements Serializable {
 	private Date endTime;
 	//1：正常2：禁止
 	private Integer deleteFlag;
+	
+	private String createBy;
 
 	private List<ReportDetailsDO> reportList;
 	
 	
 	
+	public String getCreateBy() {
+		return createBy;
+	}
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
 	public List<ReportDetailsDO> getReportList() {
 		return reportList;
 	}

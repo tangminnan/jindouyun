@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jindouyun.common.utils.R;
+import com.jindouyun.common.utils.ShiroUtils;
 import com.jindouyun.information.dao.ReportDetailsDao;
 import com.jindouyun.information.dao.ReportListDao;
 import com.jindouyun.information.domain.ReportDetailsDO;
@@ -63,7 +64,7 @@ public class ReportListServiceImpl implements ReportListService {
 		ReportListDO report = new ReportListDO();
 		report.setDeleteFlag(1);
 		report.setCreateDate(new Date());
-		//report.setReportNum(reportList.getReportNum());
+		report.setCreateBy(ShiroUtils.getUser().getName());
 		report.setReportName(reportList.getReportName());
 		if(reportListDao.save(report)>0){
 			List<ReportDetailsDO> reportDetails = reportList.getReportList();
@@ -85,7 +86,7 @@ public class ReportListServiceImpl implements ReportListService {
 		ReportListDO report = new ReportListDO();
 		report.setDeleteFlag(1);
 		report.setCreateDate(new Date());
-		//report.setReportNum(reportList.getReportNum());
+		report.setCreateBy(reportList.getCreateBy());
 		report.setReportName(reportList.getReportName());
 		
 		reportListDao.remove(reportList.getId());

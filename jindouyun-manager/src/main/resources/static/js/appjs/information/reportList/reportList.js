@@ -33,7 +33,7 @@ function load() {
 								//说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
 								limit: params.limit,
 								offset:params.offset,
-								reportName:$('#searchName').val(),
+								reportName:encodeURI($('#searchName').val()),
 					           // username:$('#searchName').val()
 							};
 						},
@@ -62,6 +62,10 @@ function load() {
 																{
 									field : 'createDate', 
 									title : '创建日期' 
+								},
+								{
+									field : 'createBy', 
+									title : '发布人' 
 								},
 								/*								{
 									field : 'startTime', 
@@ -120,15 +124,15 @@ function edit(id) {
 	layer.full(page);
 }
 function erwei(id){
-	var host = window.location.hostname;
-	var port = window.location.port;
+	//var host = window.location.hostname;
+	//var port = window.location.port;
 	layer.open({
 		type : 2,
 		title : '二维码',
 		maxmin : true,
 		shadeClose : false, // 点击遮罩关闭层
 		area : [ '520px', '520px' ],
-		content : prefix + '/erweicode/' + id +"/"+ host+"/"+ port// iframe的url
+		content : prefix + '/erweicode/' + id // iframe的url
 	});
 }
 function remove(id) {

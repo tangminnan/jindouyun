@@ -1,7 +1,9 @@
 package com.jindouyun.information.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +31,7 @@ import com.jindouyun.common.utils.PageUtils;
 import com.jindouyun.common.utils.QRCodeUtils;
 import com.jindouyun.common.utils.Query;
 import com.jindouyun.common.utils.R;
+import com.jindouyun.common.utils.ShiroUtils;
 
 /**
  * 报告列表
@@ -58,8 +61,16 @@ public class ReportListController {
 	@ResponseBody
 	@GetMapping("/list")
 	@RequiresPermissions("information:reportList:reportList")
-	public PageUtils list(@RequestParam Map<String, Object> params){
+	public PageUtils list(@RequestParam Map<String, Object> params) throws UnsupportedEncodingException{
 		//查询列表数据
+		Object object = params.get("reportName")==""?"":params.get("reportName");
+		object = ((String) object).replaceAll("%(?![0-9a-fA-F]{2})", "%25");
+		String urlStr = URLDecoder.decode((String) object, "UTF-8");
+		params.put("reportName", urlStr);
+		System.out.println(urlStr);
+		if(!ShiroUtils.getUser().getUsername().equals("admin")){
+			params.put("createBy", ShiroUtils.getUser().getUsername());
+		}
         Query query = new Query(params);
 		List<ReportListDO> reportListList = reportListService.list(query);
 		int total = reportListService.count(query);
@@ -142,15 +153,15 @@ public class ReportListController {
 	}
 
 	
-	@GetMapping("/erweicode/{id}/{host}/{port}")
-	String erweicode(@PathVariable("id") Integer id,@PathVariable("host") String host,@PathVariable("port") String port,Model model){
+	@GetMapping("/erweicode/{id}")
+	String erweicode(@PathVariable("id") Integer id,Model model){
 		try {
 			//File directory = new File("src/main/resources"); 
 	        //String courseFile = directory.getCanonicalPath();
 			String resource = ReportListController.class.getResource("/static/img/logo.jpg").getPath();
 			String destPath = bootdoConfig.getUploadPath();
 			int rand = new Random().nextInt(99999999);
-	        String con = host+":"+port+"/report/mobilePage/"+String.valueOf(id);
+	        String con = "http://jdy.jingtu99.com/report/mobilePage/"+String.valueOf(id);
 	        //System.out.println(con);
 			String encode = QRCodeUtils.encode(con, resource, destPath, "qrcode", true);
 			model.addAttribute("url", "/files/"+encode);

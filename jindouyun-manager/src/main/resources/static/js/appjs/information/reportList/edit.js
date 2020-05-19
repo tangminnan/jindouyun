@@ -29,6 +29,7 @@ function update() {
 	
 	var report = {
 		id : $('input[name="id"]').val(),
+		createBy : $('input[name="createBy"]').val(),
 		reportNum : $('input[name="reportNum"]').val(),
 		reportName : $('input[name="reportName"]').val(),
 		reportList: choosecontent,
