@@ -6,7 +6,7 @@
     <groupId>com.jindouyun</groupId>
     <artifactId>jindouyun-manager</artifactId>
     <version>1.6.9</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>jindouyun-manager</name>
     <description>Demo project for Spring Boot</description>
@@ -240,7 +240,7 @@
 		</dependency>
         
         <!--war包部署需要-->
-     <!-- <dependency>
+     <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
@@ -254,7 +254,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
-        </dependency> -->
+        </dependency>
     </dependencies> 
     <build>
         <plugins>

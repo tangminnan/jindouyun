@@ -64,7 +64,7 @@ public class ReportListServiceImpl implements ReportListService {
 		ReportListDO report = new ReportListDO();
 		report.setDeleteFlag(1);
 		report.setCreateDate(new Date());
-		report.setCreateBy(ShiroUtils.getUser().getName());
+		report.setCreateBy(ShiroUtils.getUser().getUsername());
 		report.setReportName(reportList.getReportName());
 		if(reportListDao.save(report)>0){
 			List<ReportDetailsDO> reportDetails = reportList.getReportList();
